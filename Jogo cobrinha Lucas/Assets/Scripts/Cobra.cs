@@ -50,4 +50,10 @@ public class Cobra : MonoBehaviour
             Destroy(collision.gameObject);
         }
     }
+
+   
+    public void DefinirVelocidade(string value)
+    {
+        GameObject.Find("Cobra").GetComponent<Cobra>().speed = float.Parse(value);
+    }
 }
