@@ -5,10 +5,7 @@ using UnityEngine;
 public class Cobra : MonoBehaviour
 {
     [SerializeField] GameObject cobra;
-<<<<<<< Updated upstream
-=======
-    [SerializeField]  
->>>>>>> Stashed changes
+
     
     private void Start()
     {
