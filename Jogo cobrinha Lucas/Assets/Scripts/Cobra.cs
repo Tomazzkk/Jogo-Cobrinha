@@ -22,25 +22,28 @@ public class Cobra : MonoBehaviour
     }
     private void MovCobra()
     {
+
         Vector2 vector2 = cobra.transform.position;
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
+        if (Input.GetKey(KeyCode.LeftArrow))
         {
-            vector2.x += -1 * speed;
+            vector2.x += -1 * speed * Time.deltaTime;
             
         }
-        if (Input.GetKeyDown(KeyCode.RightArrow))
+        if (Input.GetKey(KeyCode.RightArrow))
         {
-            vector2.x += 1 * speed;
+            vector2.x += 1 * speed * Time.deltaTime;
         }
-        if (Input.GetKeyDown(KeyCode.UpArrow))
+        if (Input.GetKey(KeyCode.UpArrow))
         {
-            vector2.y += 1 * speed;
+            vector2.y += 1 * speed * Time.deltaTime;
         }
-        if (Input.GetKeyDown(KeyCode.DownArrow))
+        if (Input.GetKey(KeyCode.DownArrow))
         {
-            vector2.y += -1 * speed;
+            vector2.y += -1 * speed * Time.deltaTime;
         }
         cobra.transform.position = vector2; 
+
+        
     }
 
 
@@ -48,7 +51,7 @@ public class Cobra : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Obstaculo"))
         {
-            Destroy(collision.gameObject);
+            Destroy(collision.gameObject);  
         }
     }
 
