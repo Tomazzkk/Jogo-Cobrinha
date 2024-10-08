@@ -8,6 +8,7 @@ public class Cobra : MonoBehaviour
 {
     [SerializeField] GameObject cobra;
     [SerializeField] float speed;
+    [SerializeField]
     
     private void Start()
     {

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -9,7 +10,8 @@ public class GameManager : MonoBehaviour
     float speed = 1;
     public int diametroDoCampo;
     public int[,] grade;
-
+    [SerializeField] GameObject AreaPrefab;
+    [SerializeField] GameObject menu;   
 
 
     public float Speed { get => speed; set => speed = value; }
@@ -22,6 +24,7 @@ public class GameManager : MonoBehaviour
     }
     private void Start()
     {
+        menu = GameObject.Find("Menu Window");
         GerarGrade();
     }
 
@@ -34,9 +37,16 @@ public class GameManager : MonoBehaviour
         Camera.main.transform.position = new Vector3(diametroDoCampo / 2f - 0.5f, diametroDoCampo / 2f - 0.5f, -10);
         Camera.main.orthographicSize = diametroDoCampo / 2f;
     }
-    public void DefinirDIametro(string value)
+        public void DefinirDIametro(string value)
+        {
+            diametroDoCampo = int.Parse(value);
+        }
+    public void IniciarJogo()
     {
-        diametroDoCampo = int.Parse(value);
+        Camera.main.transform.position = new Vector3(diametroDoCampo / 2f - 0.5f, diametroDoCampo / 2f - 0.5f, -10);
+        Camera.main.orthographicSize = diametroDoCampo / 2f;  
+        menu.SetActive(false);
+        
+
     }
-   
 }
