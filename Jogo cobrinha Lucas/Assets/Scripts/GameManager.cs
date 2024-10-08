@@ -7,9 +7,7 @@ public class GameManager : MonoBehaviour
 {
     private Vector2 screenBounds;
     static public GameManager instance;
-    float speed = 1;
-    public int diametroDoCampo;
-    public int[,] grade;
+    float speed = 1
     [SerializeField] GameObject AreaPrefab;
     [SerializeField] GameObject menu;
    
@@ -30,19 +28,19 @@ public class GameManager : MonoBehaviour
     }
     public void IniciarJogo()
     {
-        Camera.main.transform.position = new Vector3(diametroDoCampo / 2f - 0.5f, diametroDoCampo / 2f - 0.5f, -10);
-        Camera.main.orthographicSize = diametroDoCampo / 2f;
+        Camera.main.transform.position = new Vector3(Obstacle.instance.diametroDoCampo / 2f - 0.5f, Obstacle.instance.diametroDoCampo / 2f - 0.5f, -10);
+        Camera.main.orthographicSize = Obstacle.instance.diametroDoCampo / 2f;
         menu.SetActive(false);
 
     }
 
     void GerarGrade()
     {
-        grade = new int[diametroDoCampo,diametroDoCampo];
+        grade = new int[Obstacle.instance.diametroDoCampo, Obstacle.instance.diametroDoCampo];
     }
-        public void DefinirDIametro(string value)
-        {
-            diametroDoCampo = int.Parse(value);
-        }
+    public void DefinirDIametro(string value)
+    {
+    Obstacle.instance.diametroDoCampo = int.Parse(value);
+    }
   
 }
