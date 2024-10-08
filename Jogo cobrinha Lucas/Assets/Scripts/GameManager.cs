@@ -7,8 +7,8 @@ public class GameManager : MonoBehaviour
 {
     private Vector2 screenBounds;
     static public GameManager instance;
-    float speed = 1
-    [SerializeField] GameObject AreaPrefab;
+    float speed = 1;
+   [SerializeField]  GameObject AreaPrefab;
     [SerializeField] GameObject menu;
    
 
