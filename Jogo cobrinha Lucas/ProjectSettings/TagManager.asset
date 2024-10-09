@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Obstaculo
   - Cobra
+  - Maca
   layers:
   - Default
   - TransparentFX
