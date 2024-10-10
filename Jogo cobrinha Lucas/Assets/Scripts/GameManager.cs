@@ -7,7 +7,7 @@ public class GameManager : MonoBehaviour
 {
     private Vector2 screenBounds;
     
-  
+    float speed = 1;
    [SerializeField]  GameObject AreaPrefab;
     [SerializeField] GameObject menu;
     public int diametroDoCampo;
@@ -16,7 +16,7 @@ public class GameManager : MonoBehaviour
 
 
 
-    
+    public float Speed { get => speed; set => speed = value; }
     public Vector2 ScreenBounds { get => screenBounds; }
     #region Singleton
     static public GameManager instance;
