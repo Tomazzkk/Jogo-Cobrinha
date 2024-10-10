@@ -1,102 +1,131 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.Mathematics;
-using UnityEditor;
 using UnityEngine;
 
 public class Cobra : MonoBehaviour
 {
-    [SerializeField] GameObject cabecaCobra; // variavel serializada da cabeca da cobra
-    [SerializeField] float speed; // variavel que controla a velocidade do jogo
-    [SerializeField] List<GameObject> cobracorpolist = new List<GameObject>(); // lista para organizar a cobra e seu corpo
-    [SerializeField] GameObject corpoCobra; // variavel GameObject do corpo da cobra 
-    [SerializeField] float distanciaEntreSegmentos = 0.5f; // Distância entre os segmentos do corpo
-    private List<Vector3> posicoesAnteriores = new List<Vector3>(); // Armazena as posições anteriores da cabeça
+    public Transform segmentoPrefab; // Prefab do segmento do corpo da cobra
+    public Vector2Int direcao; // Direção atual da cobra
+    public float velocidade; // Velocidade da cobra
+   // public float multiplicadorVelocidade = 1f; // Multiplicador de velocidade
+    public int tamanhoInicial = 1; // Tamanho inicial da cobra
+    public bool atravessarParedes = false; // Controla se a cobra pode atravessar as paredes
 
+    private List<Transform> segmentos = new List<Transform>(); // Lista de segmentos do corpo
+    private Vector2Int entrada; // Armazena a direção de entrada
+    private float proximaAtualizacao; // Controla quando ocorrerá o próximo movimento
 
-    private void Awake()
-    {
-        
-    }
     private void Start()
     {
-        
-        //Instantiate(cobra);
+        ReiniciarEstado(); // Reinicia o estado da cobra ao iniciar
     }
+
     private void Update()
     {
-        MovCobra(); // Checa a todo momento oque foi pedido no metodo
-        
-      
-    }
-
-    
-    private void MovCobra()
-    {
-
-        Vector2 vector2 = cabecaCobra.transform.position;
-        if (Input.GetKey(KeyCode.LeftArrow))
+        // Controla a direção da cobra com base nas teclas pressionadas
+        if (Input.GetKeyDown(KeyCode.UpArrow))
         {
-            vector2.x += -1 * speed * Time.deltaTime;
-            
+            direcao = Vector2Int.up;
         }
-        if (Input.GetKey(KeyCode.RightArrow))
+        else if (Input.GetKeyDown(KeyCode.DownArrow))
         {
-            vector2.x += 1 * speed * Time.deltaTime;
+            direcao = Vector2Int.down;
         }
-        if (Input.GetKey(KeyCode.UpArrow))
+        if (Input.GetKeyDown(KeyCode.RightArrow))
         {
-            vector2.y += 1 * speed * Time.deltaTime;
+            direcao = Vector2Int.right;
         }
-        if (Input.GetKey(KeyCode.DownArrow))
+        else if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
-            vector2.y += -1 * speed * Time.deltaTime;
-        }
-        
-        cabecaCobra.transform.position = vector2;
-
-        posicoesAnteriores.Insert(0, cabecaCobra.transform.position);
-
-        // Mantém a lista com tamanho adequado
-        if (posicoesAnteriores.Count > (cobracorpolist.Count + 1) * Mathf.RoundToInt(distanciaEntreSegmentos / Time.deltaTime))
-        {
-            posicoesAnteriores.RemoveAt(posicoesAnteriores.Count - 1);
-        }
-
-
-    }
-
-
-    private void OnCollisionEnter2D(Collision2D collision)  // metodo para checar a colisao
-
-    {
-
-        if (collision.gameObject.CompareTag("Maca"))
-        {
-            GameObject novaParteCorpo = Instantiate(corpoCobra, cobracorpolist[cobracorpolist.Count - 1].transform.position, Quaternion.identity);
-            cobracorpolist.Add(novaParteCorpo); // adiciona o corpo da cobra à lista
-            Debug.Log("Colidiu"); // fala no console que colidiu
-           Destroy(collision.gameObject); // destroi o game object colidido
+            direcao = Vector2Int.left;
         }
     }
-    private void MoverCorpo()
+
+    private void FixedUpdate()
     {
-        for (int i = 0; i < cobracorpolist.Count; i++)
+        if (Time.time < proximaAtualizacao)
         {
-            int indice = (i + 1) * Mathf.RoundToInt(distanciaEntreSegmentos / Time.deltaTime);
-            if (i < posicoesAnteriores.Count)
+            return; // Aguarda até a próxima atualização
+        }
+        if (entrada != Vector2Int.zero)
+        {
+            direcao = entrada; // Atualiza a direção da cobra
+        }
+
+        // Move cada segmento para a posição do segmento anterior
+        for (int i = segmentos.Count - 1; i > 0; i--)
+        {
+            segmentos[i].position = segmentos[i - 1].position;
+        }
+
+        // Move a cabeça da cobra na direção atual
+        // Arredonda os valores para garantir o alinhamento à grade
+        int x = Mathf.RoundToInt(transform.position.x) + direcao.x;
+        int y = Mathf.RoundToInt(transform.position.y) + direcao.y;
+        transform.position = new Vector2(x, y);
+
+        proximaAtualizacao = Time.time + (1f / (velocidade));
+    }
+
+    public void Crescer()
+    {
+        // Instancia um novo segmento de corpo
+        Transform segmento = Instantiate(segmentoPrefab);
+        segmento.position = segmentos[segmentos.Count - 1].position;
+        segmentos.Add(segmento); // Adiciona o novo segmento à lista
+    }
+
+    public void ReiniciarEstado()
+    {
+        // Define a direção inicial da cobra para a direita
+        direcao = Vector2Int.right;
+        transform.position = Vector3.zero;
+
+        // Começa no índice 1 para não destruir a cabeça
+        for (int i = 1; i < segmentos.Count; i++)
+        {
+            Destroy(segmentos[i].gameObject); // Destroi os segmentos antigos
+        }
+
+        // Limpa a lista e adiciona a cabeça de volta
+        segmentos.Clear();
+        segmentos.Add(transform);
+
+        // Adiciona os segmentos do corpo iniciais
+        for (int i = 0; i < tamanhoInicial - 1; i++)
+        {
+            Crescer();
+        }
+    }
+
+    public bool Ocupa(int x, int y)
+    {
+        // Verifica se algum segmento da cobra ocupa a posição (x, y)
+        foreach (Transform segmento in segmentos)
+        {
+            if (Mathf.RoundToInt(segmento.position.x) == x & Mathf.RoundToInt(segmento.position.y) == y)
             {
-                // Atribui a posição anterior da cabeça para cada segmento do corpo
-                cobracorpolist[i].transform.position = posicoesAnteriores[i];
+                return true;
             }
         }
+
+        return false; // Retorna falso se nenhum segmento estiver na posição
     }
 
-
-    public void DefinirVelocidade(string value) //Método com parametro que define a velocidade atraves do menu 
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        GameObject.Find("Cobra").GetComponent<Cobra>().speed = float.Parse(value); // manda o valor inserido para a variavel speed
+        if (collision.gameObject.CompareTag("Maca"))
+        {
+            Crescer();// A cobra cresce quando colide com uma maçã
+            Destroy(collision.gameObject);
+        }
+     
     }
 
 
+    public void DefinirVelocidade(string value) //Método com parâmetro que define a velocidade através do menu 
+    {
+        GameObject.Find("Cobra").GetComponent<Cobra>().velocidade = float.Parse(value); // manda o valor inserido para a variável speed
+       
+    }
 }
