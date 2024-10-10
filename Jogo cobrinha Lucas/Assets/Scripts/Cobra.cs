@@ -10,8 +10,8 @@ public class Cobra : MonoBehaviour
     [SerializeField] float speed; // variavel que controla a velocidade do jogo
     [SerializeField] List<GameObject> cobracorpolist = new List<GameObject>(); // lista para organizar a cobra e seu corpo
     [SerializeField] GameObject corpoCobra; // variavel GameObject do corpo da cobra 
-    [SerializeField] float distanciaEntreSegmentos = 0.5f; // Distância entre os segmentos do corpo
-    private List<Vector3> posicoesAnteriores = new List<Vector3>(); // Armazena as posições anteriores da cabeça
+    
+    
 
 
     private void Awake()
@@ -55,14 +55,14 @@ public class Cobra : MonoBehaviour
         
         cabecaCobra.transform.position = vector2;
 
-        posicoesAnteriores.Insert(0, cabecaCobra.transform.position);
+     
 
-        // Mantém a lista com tamanho adequado
+        /*// Mantém a lista com tamanho adequado
         if (posicoesAnteriores.Count > (cobracorpolist.Count + 1) * Mathf.RoundToInt(distanciaEntreSegmentos / Time.deltaTime))
         {
             posicoesAnteriores.RemoveAt(posicoesAnteriores.Count - 1);
         }
-
+        */
 
     }
 
@@ -79,7 +79,7 @@ public class Cobra : MonoBehaviour
            Destroy(collision.gameObject); // destroi o game object colidido
         }
     }
-    private void MoverCorpo()
+    /*private void MoverCorpo()
     {
         for (int i = 0; i < cobracorpolist.Count; i++)
         {
@@ -90,7 +90,7 @@ public class Cobra : MonoBehaviour
                 cobracorpolist[i].transform.position = posicoesAnteriores[i];
             }
         }
-    }
+    }*/
 
 
     public void DefinirVelocidade(string value) //Método com parametro que define a velocidade atraves do menu 
