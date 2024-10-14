@@ -114,11 +114,12 @@ public class Cobra : MonoBehaviour
         return false; // Retorna falso se nenhum segmento estiver na posição
     }
 
-    private void OnTriggerEnter2D(Collider2D outro)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (outro.gameObject.CompareTag("Maca"))
+        if (collision.gameObject.CompareTag("Maca"))
         {
             Crescer(); // A cobra cresce quando colide com uma maçã
+            Destroy(collision.gameObject);
         }
         
     }
