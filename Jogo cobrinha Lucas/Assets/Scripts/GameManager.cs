@@ -13,7 +13,8 @@ public class GameManager : MonoBehaviour
     public int diametroDoCampo;
     public int[,] grade;
     [SerializeField] public GameObject maca;
-
+    [SerializeField] int numeroDeMaca;
+    
 
 
     public float Speed { get => speed; set => speed = value; }
@@ -41,11 +42,27 @@ public class GameManager : MonoBehaviour
 
     void GerarGrade()
     {
-       grade = new int[diametroDoCampo,diametroDoCampo];
+       grade = new int [diametroDoCampo,diametroDoCampo];
     }
     public void DefinirDIametro(string value)
     {
     diametroDoCampo = int.Parse(value);
     }
+  void spawnMaca()
+    {
+  /*      if(numeroDeMaca < 1)
+        {
+            grade = new Grade [diametroDoCampo, diametroDoCampo];
+            for (int i = 0; i < diametroDoCampo; i++)
+            {
+                for (int j = 0; j < diametroDoCampo; j++)
+                {
+                     Instantiate(maca, new Vector2(i, j), Quaternion.identity).GetComponent<Cobra>();
+                    Grade.DefinirIndex(i, j);
+                    grade[i, j] = grade;
+                }
+            }
+        }
+    */}
   
 }

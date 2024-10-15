@@ -11,11 +11,22 @@ public class Cobra : MonoBehaviour
     public int tamanhoInicial = 4;
     public bool atravessarParedes = false;
 
+<<<<<<< Updated upstream
     private List<Transform> segmentos = new List<Transform>();
     //private readonly List<Transform> segmentos = new List<Transform>();
     private Vector2Int entrada;
     private float proximaAtualizacao;
 
+=======
+    public List<Transform> corpoDacobrinha = new List<Transform>(); // Lista de segmentos do corpo
+    private Vector2Int direcaoQueSempreVai; // Armazena a direção de entrada
+    private float proximaAtualizacao; // Controla quando ocorrerá o próximo movimento
+    static public Cobra instance;
+    private void Awake()
+    {
+        instance = this;
+    }
+>>>>>>> Stashed changes
     private void Start()
     {
         ResetarEstado();
