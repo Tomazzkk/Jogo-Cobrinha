@@ -990,12 +990,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb784cbb9ee38f1448a79183f056d5c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  segmentoPrefab: {fileID: 0}
+  prefabSegmento: {fileID: 0}
   direcao: {x: 0, y: 0}
   velocidade: 20
   multiplicadorVelocidade: 1
   tamanhoInicial: 4
   atravessarParedes: 0
+  corpoDacobrinha: []
 --- !u!1 &928610783
 GameObject:
   m_ObjectHideFlags: 0
@@ -1182,12 +1183,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb784cbb9ee38f1448a79183f056d5c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  segmentoPrefab: {fileID: 2145476591427965095, guid: d69c20bbf7dc74846bec63679f45a6ec, type: 3}
+  prefabSegmento: {fileID: 2145476591427965095, guid: d69c20bbf7dc74846bec63679f45a6ec, type: 3}
   direcao: {x: 0, y: 0}
   velocidade: 20
   multiplicadorVelocidade: 1
   tamanhoInicial: 4
   atravessarParedes: 0
+  corpoDacobrinha: []
 --- !u!4 &1130085500
 Transform:
   m_ObjectHideFlags: 0
@@ -1947,6 +1949,7 @@ MonoBehaviour:
   menu: {fileID: 826965773}
   diametroDoCampo: 0
   maca: {fileID: 89700104506914291, guid: a61128328e6452240909e977528f01c5, type: 3}
+  numeroDeMaca: 0
 --- !u!4 &1800902787
 Transform:
   m_ObjectHideFlags: 0

@@ -17,7 +17,8 @@ public class SpawmManager : MonoBehaviour
         instance = this;
     }
 
-   
+ 
+    
 }
 
 
