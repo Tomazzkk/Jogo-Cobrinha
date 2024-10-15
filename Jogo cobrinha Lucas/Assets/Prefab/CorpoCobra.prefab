@@ -13,9 +13,10 @@ GameObject:
   - component: {fileID: -931838919714735513}
   - component: {fileID: -6134926854073539666}
   - component: {fileID: -5725530912235820628}
+  - component: {fileID: 3072223406659072576}
   m_Layer: 0
   m_Name: CorpoCobra
-  m_TagString: Untagged
+  m_TagString: Cobra
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -171,3 +172,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2fcba7f454e2a4e4fa98a35f0a788986, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &3072223406659072576
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8351897750050425127}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33e6e2736cc5ac440b6ac7dc3d03a99c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cabecaCobra: {fileID: 8351897750050425127}
+  maca: {fileID: 89700104506914291, guid: a61128328e6452240909e977528f01c5, type: 3}
+  comeuMaca: 0

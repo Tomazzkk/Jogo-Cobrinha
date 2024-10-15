@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1059075999006124170}
   - component: {fileID: -3527907469520223643}
   - component: {fileID: 6869628328588178475}
+  - component: {fileID: -6409144635707736051}
   m_Layer: 0
   m_Name: "Ma\xE7a"
   m_TagString: Maca
@@ -148,3 +149,16 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
+--- !u!114 &-6409144635707736051
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 89700104506914291}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2a9093b9ec451c4e956264bb664d0f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gridArea: {fileID: 0}
