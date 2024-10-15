@@ -6,7 +6,7 @@ public class Cobra : MonoBehaviour
 {
     public Transform prefabSegmento;
     public Vector2Int direcao;
-    public float velocidade;
+    public float velocidade = 20f;
     public float multiplicadorVelocidade = 1f;
     public int tamanhoInicial = 4;
     public bool atravessarParedes = false;
@@ -111,8 +111,7 @@ public class Cobra : MonoBehaviour
     {
         foreach (Transform segmento in segmentos)
         {
-            if (Mathf.RoundToInt(segmento.position.x) == x &&
-                Mathf.RoundToInt(segmento.position.y) == y)
+            if (Mathf.RoundToInt(segmento.position.x) == x && Mathf.RoundToInt(segmento.position.y) == y)
             {
                 return true;
             }

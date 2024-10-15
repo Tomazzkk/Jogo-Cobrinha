@@ -42,7 +42,22 @@ public class GameManager : MonoBehaviour
 
     void GerarGrade()
     {
+<<<<<<< Updated upstream
        grade = new int [diametroDoCampo,diametroDoCampo];
+=======
+       grade = new int[diametroDoCampo,diametroDoCampo];
+
+        for (int i = 0; i < diametroDoCampo; i++)
+        {
+            for (int j = 0; j < diametroDoCampo; j++)
+            {
+                Instantiate(maca, new Vector2(i, j), Quaternion.identity);
+                DefinirIndex(i, j);
+               
+            }
+        }
+
+>>>>>>> Stashed changes
     }
     public void DefinirDIametro(string value)
     {
