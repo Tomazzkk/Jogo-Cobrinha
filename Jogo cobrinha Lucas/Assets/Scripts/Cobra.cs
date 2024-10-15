@@ -4,25 +4,25 @@ using UnityEngine;
 
 public class Cobra : MonoBehaviour
 {
-    public Transform segmentoPrefab; // Prefab do segmento do corpo da cobra
-    public Vector2Int direcao; // Direção atual da cobra
-    public float velocidade = 20f ; // Velocidade da cobra
-    public float multiplicadorVelocidade = 1f; // Multiplicador de velocidade
-    public int tamanhoInicial = 4; // Tamanho inicial da cobra
-    public bool atravessarParedes = false; // Controla se a cobra pode atravessar as paredes
+    public Transform prefabSegmento;
+    public Vector2Int direcao;
+    public float velocidade;
+    public float multiplicadorVelocidade = 1f;
+    public int tamanhoInicial = 4;
+    public bool atravessarParedes = false;
 
-    private List<Transform> corpoDacobrinha = new List<Transform>(); // Lista de segmentos do corpo
-    private Vector2Int direcaoQueSempreVai; // Armazena a direção de entrada
-    private float proximaAtualizacao; // Controla quando ocorrerá o próximo movimento
+    private List<Transform> segmentos = new List<Transform>();
+    //private readonly List<Transform> segmentos = new List<Transform>();
+    private Vector2Int entrada;
+    private float proximaAtualizacao;
 
     private void Start()
     {
-        ReiniciarEstado(); // Reinicia o estado da cobra ao iniciar
+        ResetarEstado();
     }
 
     private void Update()
     {
-        // Controla a direção da cobra com base nas teclas pressionadas
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
             direcao = Vector2Int.up;
@@ -45,54 +45,51 @@ public class Cobra : MonoBehaviour
     {
         if (Time.time < proximaAtualizacao)
         {
-            return; // Aguarda até a próxima atualização
+            return;
         }
-        if (direcaoQueSempreVai != Vector2Int.zero)
+        if (entrada != Vector2Int.zero)
         {
-            direcao = direcaoQueSempreVai; // Atualiza a direção da cobra
+            direcao = entrada;
         }
-
-        // Move cada segmento para a posição do segmento anterior
-        for (int i = corpoDacobrinha.Count - 1; i > 0; i--)
+        // Defina a posição de cada segmento para ser a mesma do segmento que ele segue.
+        // Isso deve ser feito em ordem inversa para que a posição seja definida como a anterior,
+        // caso contrário, todos ficarão empilhados.
+        for (int i = segmentos.Count - 1; i > 0; i--)
         {
-            corpoDacobrinha[i].position = corpoDacobrinha[i - 1].position;
+            segmentos[i].position = segmentos[i - 1].position;
         }
-
-        // Move a cabeça da cobra na direção atual
-        // Arredonda os valores para garantir o alinhamento à grade
+        // Mova a cobra na direção que ela está indo
+        // Arredonde os valores para garantir que esteja alinhado à grade
         int x = Mathf.RoundToInt(transform.position.x) + direcao.x;
         int y = Mathf.RoundToInt(transform.position.y) + direcao.y;
         transform.position = new Vector2(x, y);
-
-        // Define o próximo tempo de atualização com base na velocidade
+        // Defina o tempo da próxima atualização com base na velocidade
         proximaAtualizacao = Time.time + (1f / (velocidade * multiplicadorVelocidade));
     }
 
     public void Crescer()
     {
-        // Instancia um novo segmento de corpo
-        Transform segmento = Instantiate(segmentoPrefab);
-        segmento.position = corpoDacobrinha[corpoDacobrinha.Count - 1].position;
-        corpoDacobrinha.Add(segmento); // Adiciona o novo segmento à lista
+        Transform segmento = Instantiate(prefabSegmento);
+        segmento.position = segmentos[segmentos.Count - 1].position;
+        segmentos.Add(segmento);
     }
 
-    public void ReiniciarEstado()
+    public void ResetarEstado()
     {
-        // Define a direção inicial da cobra para a direita
         direcao = Vector2Int.right;
         transform.position = Vector3.zero;
 
-        // Começa no índice 1 para não destruir a cabeça
-        for (int i = 1; i < corpoDacobrinha.Count; i++)
+        // Comece no índice 1 para evitar destruir a cabeça
+        for (int i = 1; i < segmentos.Count; i++)
         {
-            Destroy(corpoDacobrinha[i].gameObject); // Destroi os segmentos antigos
+            Destroy(segmentos[i].gameObject);
         }
 
-        // Limpa a lista e adiciona a cabeça de volta
-        corpoDacobrinha.Clear();
-        corpoDacobrinha.Add(transform);
+        // Limpa a lista mas adiciona novamente a cabeça
+        segmentos.Clear();
+        segmentos.Add(transform);
 
-        // Adiciona os segmentos do corpo iniciais
+        // -1 porque a cabeça já está na lista
         for (int i = 0; i < tamanhoInicial - 1; i++)
         {
             Crescer();
@@ -101,8 +98,7 @@ public class Cobra : MonoBehaviour
 
     public bool Ocupa(int x, int y)
     {
-        // Verifica se algum segmento da cobra ocupa a posição (x, y)
-        foreach (Transform segmento in corpoDacobrinha)
+        foreach (Transform segmento in segmentos)
         {
             if (Mathf.RoundToInt(segmento.position.x) == x &&
                 Mathf.RoundToInt(segmento.position.y) == y)
@@ -111,22 +107,25 @@ public class Cobra : MonoBehaviour
             }
         }
 
-        return false; // Retorna falso se nenhum segmento estiver na posição
+        return false;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Maca"))
         {
-            Crescer(); // A cobra cresce quando colide com uma maçã
+            Crescer();
             Destroy(collision.gameObject);
         }
-        
-    }
+        if (collision.gameObject.CompareTag("Cobra"))
+        {
+            Debug.Log("morreu");
+        }
 
+
+    }
     public void DefinirVelocidade(string value)
     {
-        GameObject.Find("Cobra").GetComponent<Cobra>().velocidade = float.Parse(value); // manda o valor inserido para a variável speed
+        GameObject.Find("Cobra").GetComponent<Cobra>().velocidade = float.Parse(value); // manda o valor inserido para a variável velocidade
     }
-
 }
