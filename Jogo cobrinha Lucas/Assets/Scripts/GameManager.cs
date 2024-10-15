@@ -29,6 +29,7 @@ public class GameManager : MonoBehaviour
     static public GameManager instance;
     private void Awake()
     {
+        Time.timeScale = 0;
         instance = this; // Define a instância do GameManager
         // Calcula os limites da tela com base no tamanho da câmera
         screenBounds = new Vector3(-1, 1) + Camera.main.ScreenToViewportPoint(new Vector3(Screen.width, Screen.height));
@@ -45,6 +46,7 @@ public class GameManager : MonoBehaviour
     // Função que inicia o jogo, ajustando a câmera com base no tamanho do campo
     public void IniciarJogo()
     {
+        Time.timeScale = 1;
         // Ajusta a posição e o tamanho da câmera de acordo com o diâmetro do campo
         Camera.main.transform.position = new Vector3(diametroDoCampo / 2.0f - 2.0f, diametroDoCampo / 2.0f - 11.0f, -10);
         Camera.main.orthographicSize = diametroDoCampo / 2f;
@@ -77,6 +79,7 @@ public class GameManager : MonoBehaviour
     public void GameOver()
     {
         gameOver.SetActive(true); // Ativa o menu de game over
+        Time.timeScale = 0;
     }
 
     // Função chamada quando o botão de menu é pressionado, reinicia o jogo
