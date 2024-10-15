@@ -1,102 +1,132 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.Mathematics;
-using UnityEditor;
 using UnityEngine;
 
 public class Cobra : MonoBehaviour
 {
-    [SerializeField] GameObject cabecaCobra; // variavel serializada da cabeca da cobra
-    [SerializeField] float speed; // variavel que controla a velocidade do jogo
-    [SerializeField] List<GameObject> cobracorpolist = new List<GameObject>(); // lista para organizar a cobra e seu corpo
-    [SerializeField] GameObject corpoCobra; // variavel GameObject do corpo da cobra 
-    
-    
+    public Transform prefabSegmento;
+    public Vector2Int direcao;
+    public float velocidade;
+    public float multiplicadorVelocidade = 1f;
+    public int tamanhoInicial = 4;
+    public bool atravessarParedes = false;
 
+    private List<Transform> segmentos = new List<Transform>();
+    //private readonly List<Transform> segmentos = new List<Transform>();
+    private Vector2Int entrada;
+    private float proximaAtualizacao;
 
-    private void Awake()
-    {
-        
-    }
     private void Start()
     {
-        
-        //Instantiate(cobra);
+        ResetarEstado();
     }
+
     private void Update()
     {
-        MovCobra(); // Checa a todo momento oque foi pedido no metodo
-        
-      
-    }
-
-    
-    private void MovCobra()
-    {
-
-        Vector2 vector2 = cabecaCobra.transform.position;
-        if (Input.GetKey(KeyCode.LeftArrow))
+        if (Input.GetKeyDown(KeyCode.UpArrow))
         {
-            vector2.x += -1 * speed * Time.deltaTime;
-            
+            direcao = Vector2Int.up;
         }
-        if (Input.GetKey(KeyCode.RightArrow))
+        else if (Input.GetKeyDown(KeyCode.DownArrow))
         {
-            vector2.x += 1 * speed * Time.deltaTime;
+            direcao = Vector2Int.down;
         }
-        if (Input.GetKey(KeyCode.UpArrow))
+        if (Input.GetKeyDown(KeyCode.RightArrow))
         {
-            vector2.y += 1 * speed * Time.deltaTime;
+            direcao = Vector2Int.right;
         }
-        if (Input.GetKey(KeyCode.DownArrow))
+        else if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
-            vector2.y += -1 * speed * Time.deltaTime;
-        }
-        
-        cabecaCobra.transform.position = vector2;
-
-     
-
-        /*// Mantém a lista com tamanho adequado
-        if (posicoesAnteriores.Count > (cobracorpolist.Count + 1) * Mathf.RoundToInt(distanciaEntreSegmentos / Time.deltaTime))
-        {
-            posicoesAnteriores.RemoveAt(posicoesAnteriores.Count - 1);
-        }
-        */
-
-    }
-
-
-    private void OnCollisionEnter2D(Collision2D collision)  // metodo para checar a colisao
-
-    {
-
-        if (collision.gameObject.CompareTag("Maca"))
-        {
-            GameObject novaParteCorpo = Instantiate(corpoCobra, cobracorpolist[cobracorpolist.Count - 1].transform.position, Quaternion.identity);
-            cobracorpolist.Add(novaParteCorpo); // adiciona o corpo da cobra à lista
-            Debug.Log("Colidiu"); // fala no console que colidiu
-           Destroy(collision.gameObject); // destroi o game object colidido
+            direcao = Vector2Int.left;
         }
     }
-    /*private void MoverCorpo()
+
+    private void FixedUpdate()
     {
-        for (int i = 0; i < cobracorpolist.Count; i++)
+        if (Time.time < proximaAtualizacao)
         {
-            int indice = (i + 1) * Mathf.RoundToInt(distanciaEntreSegmentos / Time.deltaTime);
-            if (i < posicoesAnteriores.Count)
+            return;
+        }
+        if (entrada != Vector2Int.zero)
+        {
+            direcao = entrada;
+        }
+        // Defina a posição de cada segmento para ser a mesma do segmento que ele segue.
+        // Isso deve ser feito em ordem inversa para que a posição seja definida como a anterior,
+        // caso contrário, todos ficarão empilhados.
+        for (int i = segmentos.Count - 1; i > 0; i--)
+        {
+            segmentos[i].position = segmentos[i - 1].position;
+        }
+        // Mova a cobra na direção que ela está indo
+        // Arredonde os valores para garantir que esteja alinhado à grade
+        int x = Mathf.RoundToInt(transform.position.x) + direcao.x;
+        int y = Mathf.RoundToInt(transform.position.y) + direcao.y;
+        transform.position = new Vector2(x, y);
+        // Defina o tempo da próxima atualização com base na velocidade
+        proximaAtualizacao = Time.time + (1f / (velocidade * multiplicadorVelocidade));
+    }
+
+    public void Crescer()
+    {
+        Transform segmento = Instantiate(prefabSegmento);
+        segmento.position = segmentos[segmentos.Count - 1].position;
+        segmentos.Add(segmento);
+    }
+
+    public void ResetarEstado()
+    {
+        direcao = Vector2Int.right;
+        transform.position = Vector3.zero;
+
+        // Comece no índice 1 para evitar destruir a cabeça
+        for (int i = 1; i < segmentos.Count; i++)
+        {
+            Destroy(segmentos[i].gameObject);
+        }
+
+        // Limpa a lista mas adiciona novamente a cabeça
+        segmentos.Clear();
+        segmentos.Add(transform);
+
+        // -1 porque a cabeça já está na lista
+        for (int i = 0; i < tamanhoInicial - 1; i++)
+        {
+            Crescer();
+        }
+    }
+
+    public bool Ocupa(int x, int y)
+    {
+        foreach (Transform segmento in segmentos)
+        {
+            if (Mathf.RoundToInt(segmento.position.x) == x &&
+                Mathf.RoundToInt(segmento.position.y) == y)
             {
-                // Atribui a posição anterior da cabeça para cada segmento do corpo
-                cobracorpolist[i].transform.position = posicoesAnteriores[i];
+                return true;
             }
         }
-    }*/
 
-
-    public void DefinirVelocidade(string value) //Método com parametro que define a velocidade atraves do menu 
-    {
-        GameObject.Find("Cobra").GetComponent<Cobra>().speed = float.Parse(value); // manda o valor inserido para a variavel speed
+        return false;
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Maca"))
+        {
+            Crescer();
+            Destroy(collision.gameObject);
+            GameManager.instance.GerarGrade();
+        }
+        if (collision.gameObject.CompareTag("Cobra"))
+        {
+            Debug.Log("morreu");
+        }
 
+
+    }
+    public void DefinirVelocidade(string value)
+    {
+        GameObject.Find("Cobra").GetComponent<Cobra>().velocidade = float.Parse(value); // manda o valor inserido para a variável velocidade
+    }
 }

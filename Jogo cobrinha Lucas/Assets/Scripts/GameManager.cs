@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
@@ -13,6 +14,7 @@ public class GameManager : MonoBehaviour
     public int diametroDoCampo;
     public int[,] grade;
     [SerializeField] public GameObject maca;
+    int indexI, indexJ;
 
 
 
@@ -38,10 +40,26 @@ public class GameManager : MonoBehaviour
         menu.SetActive(false);
 
     }
+    public void DefinirIndex(int i, int j)
+    {
+        indexI = i;
+        indexJ = j;
+    }
 
-    void GerarGrade()
+   public void GerarGrade()
     {
        grade = new int[diametroDoCampo,diametroDoCampo];
+/*
+        for (int i = 0; i < diametroDoCampo; i++)
+        {
+            for (int j = 0; j < diametroDoCampo; j++)
+            {
+                Instantiate(maca, new Vector2(i, j), Quaternion.identity);
+                DefinirIndex(i, j);
+               
+            }
+        }
+*/
     }
     public void DefinirDIametro(string value)
     {
