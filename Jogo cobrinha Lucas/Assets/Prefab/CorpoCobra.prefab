@@ -144,7 +144,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -187,3 +187,4 @@ MonoBehaviour:
   cabecaCobra: {fileID: 8351897750050425127}
   maca: {fileID: 89700104506914291, guid: a61128328e6452240909e977528f01c5, type: 3}
   comeuMaca: 0
+  cobra: {fileID: 0}
